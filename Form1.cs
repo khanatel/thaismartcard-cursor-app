@@ -16,6 +16,18 @@ namespace ThaiSmartCardReader
     {
         private static readonly IContextFactory _contextFactory = ContextFactory.Instance;
         private static string READER_NAME = "";
+        private static string SENDKEY_DELIMITER = "";
+        private static string SENDKEY_CITIZENID = "";
+        private static string SENDKEY_PREFIX = "";
+        private static string SENDKEY_FIRSTNAME = "";
+        private static string SENDKEY_LASTNAME = "";
+        private static string SENDKEY_ADDRESS = "";
+        private static string SENDKEY_SUBDISTRICT = "";
+        private static string SENDKEY_DISTRICT = "";
+        private static string SENDKEY_PROVINCE = "";
+        private static string SENDKEY_ISSUERDATE = "";
+        private static string SENDKEY_EXPIREDATE = "";
+        private static string SENDKEY_ISSUER = "";
         private static bool SMART_CARD_CONNECTED = false;
 
         public Form1()
@@ -28,6 +40,18 @@ namespace ThaiSmartCardReader
             this.TopMost = true;
 
             READER_NAME = ConfigurationManager.AppSettings["READER_NAME"];
+            SENDKEY_DELIMITER = ConfigurationManager.AppSettings["SENDKEY_DELIMITER"];
+            SENDKEY_CITIZENID = ConfigurationManager.AppSettings["SENDKEY_CITIZENID"];
+            SENDKEY_PREFIX = ConfigurationManager.AppSettings["SENDKEY_PREFIX"];
+            SENDKEY_FIRSTNAME = ConfigurationManager.AppSettings["SENDKEY_FIRSTNAME"];
+            SENDKEY_LASTNAME = ConfigurationManager.AppSettings["SENDKEY_LASTNAME"];
+            SENDKEY_ADDRESS = ConfigurationManager.AppSettings["SENDKEY_ADDRESS"];
+            SENDKEY_SUBDISTRICT = ConfigurationManager.AppSettings["SENDKEY_SUBDISTRICT"];
+            SENDKEY_DISTRICT = ConfigurationManager.AppSettings["SENDKEY_DISTRICT"];
+            SENDKEY_PROVINCE = ConfigurationManager.AppSettings["SENDKEY_PROVINCE"];
+            SENDKEY_ISSUERDATE = ConfigurationManager.AppSettings["SENDKEY_ISSUERDATE"];
+            SENDKEY_EXPIREDATE = ConfigurationManager.AppSettings["SENDKEY_EXPIREDATE"];
+            SENDKEY_ISSUER = ConfigurationManager.AppSettings["SENDKEY_ISSUER"];
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -36,8 +60,8 @@ namespace ThaiSmartCardReader
         }
 
         private void SmartCardConneted()
-        {            
-            if (SMART_CARD_CONNECTED) return;            
+        {
+            if (SMART_CARD_CONNECTED) return;
 
             // lookup smart card is connected yet ?
             using (var Context = new SCardContext())
@@ -113,27 +137,61 @@ namespace ThaiSmartCardReader
                 ThaiNationalIDCardReader cardReader = new ThaiNationalIDCardReader();
                 lblCardEvent.Invoke(new Action(() => { lblCardEvent.Text = "Card reading..."; }));
                 PersonalPhoto personalPhoto = cardReader.GetPersonalPhoto();
-                SendKeys.SendWait(personalPhoto.CitizenID.Trim());
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.ThaiPersonalInfo.Prefix.Trim());
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.ThaiPersonalInfo.FirstName.Trim());
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.ThaiPersonalInfo.LastName.Trim());
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.AddressInfo.HouseNo.Trim() + " " + personalPhoto.AddressInfo.Lane.Trim() + " " + personalPhoto.AddressInfo.Road.Trim() + " " + personalPhoto.AddressInfo.VillageNo.Trim());
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.AddressInfo.SubDistrict.Trim());
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.AddressInfo.District.Trim());
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.AddressInfo.Province.Trim());
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.IssueDate.ToString("dd/MM/yyyy"));
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.ExpireDate.ToString("dd/MM/yyyy"));
-                SendKeys.SendWait("{TAB}");
-                SendKeys.SendWait(personalPhoto.Issuer.Trim());
+                if (SENDKEY_CITIZENID.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.CitizenID.Trim());
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_PREFIX.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.ThaiPersonalInfo.Prefix.Trim());
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_FIRSTNAME.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.ThaiPersonalInfo.FirstName.Trim());
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_LASTNAME.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.ThaiPersonalInfo.LastName.Trim());
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_ADDRESS.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.AddressInfo.HouseNo.Trim() + " " + personalPhoto.AddressInfo.Lane.Trim() + " " + personalPhoto.AddressInfo.Road.Trim() + " " + personalPhoto.AddressInfo.VillageNo.Trim());
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_SUBDISTRICT.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.AddressInfo.SubDistrict.Trim());
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_DISTRICT.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.AddressInfo.District.Trim());
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_PROVINCE.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.AddressInfo.Province.Trim());
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_ISSUERDATE.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.IssueDate.ToString("dd/MM/yyyy"));
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_EXPIREDATE.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.ExpireDate.ToString("dd/MM/yyyy"));
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
+                if (SENDKEY_ISSUER.Equals("1"))
+                {
+                    SendKeys.SendWait(personalPhoto.Issuer.Trim());
+                    SendKeys.SendWait(SENDKEY_DELIMITER);
+                }
                 lblCardEvent.Invoke(new Action(() => { lblCardEvent.Text = "Card read end"; }));
 #if DEBUG
                 System.Diagnostics.Debug.WriteLine($"CitizenID: {personalPhoto.CitizenID}");
@@ -195,8 +253,8 @@ namespace ThaiSmartCardReader
                         lblReaderConnect.Text = "Connected";
                         TimerSmartCard.Enabled = false;
                         SMART_CARD_CONNECTED = true;
-                        TimerChecker.Enabled = true;                        
-                    }                    
+                        TimerChecker.Enabled = true;
+                    }
                 }
                 catch (PCSCException)
                 {
@@ -214,7 +272,7 @@ namespace ThaiSmartCardReader
 #if DEBUG
                         System.Diagnostics.Debug.WriteLine("There are currently no readers installed.");
 #endif
-                    }                
+                    }
                 }
             }
         }
